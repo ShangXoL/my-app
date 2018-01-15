@@ -9,7 +9,7 @@ class LeftMenu extends Component {
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
                     <li class="active"><Link to='/dashboard'>首页 <span class="sr-only">(current)</span></Link></li>
-                    <li><a href="#">Reports</a></li>
+                    <li><Link to='/job/list'>任务列表</Link></li>
                     <li><a href="#">Analytics</a></li>
                     <li><a href="#">Export</a></li>
                 </ul>

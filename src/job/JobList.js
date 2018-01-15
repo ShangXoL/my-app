@@ -5,12 +5,14 @@ import {
 } from 'react-router-dom';
 import Navbar from '../component/Navbar';
 import LeftMenu from '../component/LeftMenu';
+import BreadCrumb from '../component/BreadCrumb';
+import PageNavigation from "../component/PageNavigation";
 
 class JobList extends Component {
     constructor(props){
         super(props);
         this.search = this.search.bind(this);
-        this.state = {jobs: []};
+        this.state = {jobs: [],pages:0};
     }
 
     componentDidMount(){
@@ -25,6 +27,8 @@ class JobList extends Component {
                 const results = rsp.data.result;
                 console.info(results);
                 this.setState({jobs:results.content});
+                this.setState({pages:results.totalPages});
+                //alert(this.state.pages+"ddddd");
             });
     }
     render() {
@@ -48,11 +52,7 @@ class JobList extends Component {
                     <div class="container-fluid">
                         <div class="row">
                             <LeftMenu/>
-                            <ol class="breadcrumb">
-                                <li><Link to="/">首页</Link></li>
-                                <li><Link to="/job/list">任务管理</Link></li>
-                                <li class="active">任务列表</li>
-                            </ol>
+                            <BreadCrumb link2='/job/list' title2='任务管理' title3='任务列表'/>
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <thead>
@@ -75,25 +75,7 @@ class JobList extends Component {
                             </div>
                         </div>
                     </div>
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination">
-                            <li>
-                                <a href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li>
-                                <a href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+                    <PageNavigation pages='1'/>
                 </div>
             </div>
         );

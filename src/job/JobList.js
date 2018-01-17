@@ -3,18 +3,19 @@ import Navbar from '../component/Navbar';
 import LeftMenu from '../component/LeftMenu';
 import BreadCrumb from '../component/BreadCrumb';
 import PageNavigation from "../component/PageNavigation";
-import decode from "jwt-decode";
 import Config from '../utils/Config';
+import AuthService from '../component/AuthService';
 
 class JobList extends Component {
     constructor(props){
         super(props);
         this.search = this.search.bind(this);
         this.state = {jobs: [],pages:0};
+        this.AuthService = new AuthService();
     }
 
     componentWillMount(){
-        if(!this.isLoggedIn()){
+        if(!this.AuthService.isLoggedIn()){
             this.props.history.push("/login");
         }
     }
@@ -25,7 +26,7 @@ class JobList extends Component {
         const query = '';
         const page = 0;
         const url = `${Config.domain}/job/search/?page=${page}`;
-        this.fetch(url,{method: 'GET'}).then(rsp => {
+        this.AuthService.fetch(url,{method: 'GET'}).then(rsp => {
             console.table(rsp);
             const results = rsp.result;
             console.table(results);
@@ -35,52 +36,6 @@ class JobList extends Component {
         });
     }
 
-    fetch(url,options){
-        const headers = {
-            'Accept':'application/json',
-            'Content-Type':'application/json',
-            'mode': 'cors'
-        }
-        if(this.isLoggedIn()){
-            headers['Authorization'] = 'Bearer '+ this.getToken();
-        }
-        return fetch(url,{
-            headers,
-            ... options
-        }).then(this._checkStatus)
-            .then(response => response.json())
-    }
-    //判断当前是否已经登录
-    isLoggedIn(){
-        const token = this.getToken();
-        let loggined = token && ! this.isTokenExpired(token);
-        return loggined;
-    }
-    _checkStatus(response){
-        if(response.status >= 200 && response.status<300){
-            return response;
-        }
-
-        var error = new Error(response.statusText);
-        error.response = response;
-        throw error;
-    }
-    getToken(){
-        return localStorage.getItem("token");
-    }
-    isTokenExpired(token){
-        try{
-            const decoded = decode(token);
-            if(decoded.exp < Date.now()/1000){
-                return true;
-            }else{
-                return false;
-            }
-        }catch(error){
-            console.error(error);
-            return false;
-        }
-    }
     render() {
         var jobs = this.state.jobs.map(job=>
             <tr>

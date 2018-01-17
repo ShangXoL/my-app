@@ -6,6 +6,10 @@ export default class AuthService{
         this.fetch = this.fetch.bind(this);
         this.login = this.login.bind(this);
         this.getProfile = this.getProfile.bind(this);
+        this.getToken = this.getToken.bind(this);
+        this.setToken = this.setToken.bind(this);
+        this.logout = this.logout.bind(this);
+        this.isLoggedIn = this.isLoggedIn.bind(this);
     }
     login(name,password){
         // Get a token
@@ -26,9 +30,7 @@ export default class AuthService{
             }
         });
     }
-    logout(){
-        localStorage.removeItem("token");
-    }
+
     getProfile(){
         return decode(this.getToken());
     }
@@ -75,11 +77,13 @@ export default class AuthService{
             return false;
         }
     }
-
+    logout(){
+        localStorage.removeItem("access_token");
+    }
     setToken(token){
-        localStorage.setItem("token",token);
+        localStorage.setItem("access_token",token);
     }
     getToken(){
-        return localStorage.getItem("token");
+        return localStorage.getItem("access_token");
     }
 }

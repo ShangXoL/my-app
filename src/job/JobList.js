@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import {
-    Link
-} from 'react-router-dom';
 import Navbar from '../component/Navbar';
 import LeftMenu from '../component/LeftMenu';
 import BreadCrumb from '../component/BreadCrumb';
 import PageNavigation from "../component/PageNavigation";
+import decode from "jwt-decode";
+import Config from '../utils/Config';
 
 class JobList extends Component {
     constructor(props){
@@ -15,21 +13,73 @@ class JobList extends Component {
         this.state = {jobs: [],pages:0};
     }
 
+    componentWillMount(){
+        if(!this.isLoggedIn()){
+            this.props.history.push("/login");
+        }
+    }
     componentDidMount(){
         this.search();
     }
     search(){
         const query = '';
         const page = 0;
-        const url = `http://localhost:8080/job/search/?page=${page}`;
-        axios.get(url)
-            .then(rsp => {
-                const results = rsp.data.result;
-                console.info(results);
-                this.setState({jobs:results.content});
-                this.setState({pages:results.totalPages});
-                //alert(this.state.pages+"ddddd");
-            });
+        const url = `${Config.domain}/job/search/?page=${page}`;
+        this.fetch(url,{method: 'GET'}).then(rsp => {
+            console.table(rsp);
+            const results = rsp.result;
+            console.table(results);
+            this.setState({jobs:results.content});
+            this.setState({pages:results.totalPages});
+            //alert(this.state.pages+"ddddd");
+        });
+    }
+
+    fetch(url,options){
+        const headers = {
+            'Accept':'application/json',
+            'Content-Type':'application/json',
+            'mode': 'cors'
+        }
+        if(this.isLoggedIn()){
+            headers['Authorization'] = 'Bearer '+ this.getToken();
+        }
+        return fetch(url,{
+            headers,
+            ... options
+        }).then(this._checkStatus)
+            .then(response => response.json())
+    }
+    //判断当前是否已经登录
+    isLoggedIn(){
+        const token = this.getToken();
+        let loggined = token && ! this.isTokenExpired(token);
+        return loggined;
+    }
+    _checkStatus(response){
+        if(response.status >= 200 && response.status<300){
+            return response;
+        }
+
+        var error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+    }
+    getToken(){
+        return localStorage.getItem("token");
+    }
+    isTokenExpired(token){
+        try{
+            const decoded = decode(token);
+            if(decoded.exp < Date.now()/1000){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(error){
+            console.error(error);
+            return false;
+        }
     }
     render() {
         var jobs = this.state.jobs.map(job=>

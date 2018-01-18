@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import {
-    Link
-} from 'react-router-dom';
 import Navbar from '../component/Navbar';
 import LeftMenu from '../component/LeftMenu';
 import BreadCrumb from '../component/BreadCrumb';
@@ -9,7 +6,7 @@ import PageNavigation from "../component/PageNavigation";
 import Config from '../utils/Config';
 import AuthService from '../component/AuthService';
 
-class JobList extends Component {
+class RegistryList extends Component {
     constructor(props){
         super(props);
         this.search = this.search.bind(this);
@@ -43,7 +40,7 @@ class JobList extends Component {
         var jobs = this.state.jobs.map(job=>
             <tr>
                 <td>{job.id}</td>
-                <td><Link to={{pathname:"/job/history",query:{page:0,jobId:job.id}}}>{job.name}</Link></td>
+                <td>{job.name}</td>
                 <td>{job.cron}</td>
                 <td>{job.description}</td>
                 <td>{job.interfaceName}</td>
@@ -60,7 +57,7 @@ class JobList extends Component {
                     <div class="container-fluid">
                         <div class="row">
                             <LeftMenu/>
-                            <BreadCrumb link2='/job/list' title2='任务管理' title3='任务列表'/>
+                            <BreadCrumb link2='/job/list' title2='任务管理' title3='注册中心'/>
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <thead>
@@ -90,4 +87,4 @@ class JobList extends Component {
     }
 }
 
-export default JobList;
+export default RegistryList;

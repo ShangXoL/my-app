@@ -5,6 +5,7 @@ import BreadCrumb from '../component/BreadCrumb';
 import PageNavigation from "../component/PageNavigation";
 import Config from '../utils/Config';
 import AuthService from '../component/AuthService';
+var moment = require('moment');
 
 class JobHistoryList extends Component {
     constructor(props){
@@ -47,8 +48,8 @@ class JobHistoryList extends Component {
                 <td>{history.jobName}</td>
                 <td>{history.cron}</td>
                 <td>{history.status}</td>
-                <td>{history.startedAt}</td>
-                <td>{history.endedAt}</td>
+                <td>{moment(new Date(history.startedAt)).format('YYYY-MM-DD HH:mm:ss')}</td>
+                <td>{moment(new Date(history.endedAt)).format('YYYY-MM-DD HH:mm:ss')}</td>
                 <td>{history.message}</td>
             </tr>
         );

@@ -23,9 +23,12 @@ class JobHistoryList extends Component {
         this.search();
     }
     search(){
-        const query = '';
+        const queryString = require('query-string');
+        const parsed = queryString.parse(this.props.location.search);
+        console.log(parsed);
+        const jobId = parsed.jobId;
         const page = 0;
-        const url = `${Config.domain}/job/history/?page=${page}`;
+        const url = `${Config.domain}/job/history/?jobId=${jobId}&page=${page}`;
         this.AuthService.fetch(url,{method: 'GET'}).then(rsp => {
             console.table(rsp);
             const results = rsp.result;
@@ -78,7 +81,7 @@ class JobHistoryList extends Component {
                             </div>
                         </div>
                     </div>
-                    <PageNavigation pages='1'/>
+                    <PageNavigation pages={this.state.pages}/>
                 </div>
             </div>
         );

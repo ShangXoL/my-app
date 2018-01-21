@@ -7,12 +7,21 @@ class PageNavigation extends Component {
     constructor(props){
         super(props);
         this.state={pages:props.pages};
+        this.handlePageChage = this.handlePageChage.bind(this);
+    }
+    handlePageChage(page=1){
+        this.setState({pages:page});
     }
     render() {
-        var pages = [];
-        //alert(this.state.pages);
-        for(let i = 0;i <this.state.pages;i++){
-            pages.push(<li><a href="#">{i+1}</a></li>);
+        var pagination = [];
+        for(let i = 0;i < this.props.pages; i++){
+            pagination.push(
+                <li>
+                    <a href="#" aria-label="home">
+                        <span aria-hidden="true">{i+1}</span>
+                    </a>
+                </li>
+            );
         }
         return (
             <nav aria-label="Page navigation">
@@ -22,7 +31,7 @@ class PageNavigation extends Component {
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    {pages}
+                    {pagination}
                     <li>
                         <a href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>

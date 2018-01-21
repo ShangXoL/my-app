@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
-import {
-    Link
-} from 'react-router-dom';
+import AuthService from '../component/AuthService';
 
 class Navbar extends Component {
+    constructor(props){
+        super(props);
+        this.AuthService = new AuthService();
+        this.logout = this.logout.bind(this);
+    }
+    logout(){
+        this.AuthService.logout();
+        window.location.href="/login";
+    }
     render() {
         return (
             <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -22,7 +29,7 @@ class Navbar extends Component {
                             <li><a href="#">Dashboard</a></li>
                             <li><a href="#">Settings</a></li>
                             <li><a href="#">Profile</a></li>
-                            <li><Link to="/login">登录</Link></li>
+                            <li><a href="#" onClick={this.logout}>欢迎【{this.AuthService.getProfile().name}】注销</a></li>
                         </ul>
                         <form class="navbar-form navbar-right">
                             <input type="text" class="form-control" placeholder="Search..."/>

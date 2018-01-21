@@ -9,15 +9,17 @@ class PageNavigation extends Component {
         this.state={pages:props.pages};
         this.handlePageChage = this.handlePageChage.bind(this);
     }
-    handlePageChage(page=1){
-        this.setState({pages:page});
+    handlePageChage(e){
+        let page = e.target.childNodes[0].innerHTML;
+        //alert(page);
+        this.props.doSearch(page);
     }
     render() {
         var pagination = [];
         for(let i = 0;i < this.props.pages; i++){
             pagination.push(
                 <li>
-                    <a href="#" aria-label="home">
+                    <a href="#" aria-label="home" onClick={this.handlePageChage}>
                         <span aria-hidden="true">{i+1}</span>
                     </a>
                 </li>

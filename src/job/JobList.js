@@ -102,7 +102,7 @@ class JobList extends Component {
                             </div>
                         </div>
                     </div>
-                    <PageNavigation pages={this.state.pages} currentPage={this.state.currentPage}/>
+                    <PageNavigation pages={this.state.pages}  doSearch={this.search}/>
                 </div>
             </div>
         );

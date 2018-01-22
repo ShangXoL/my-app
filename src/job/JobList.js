@@ -17,11 +17,6 @@ class JobList extends Component {
         this.AuthService = new AuthService();
     }
 
-    componentWillMount(){
-        if(!this.AuthService.isLoggedIn()){
-            this.props.history.push("/login");
-        }
-    }
     componentDidMount(){
         this.search();
     }

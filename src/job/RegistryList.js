@@ -13,12 +13,6 @@ class RegistryList extends Component {
         this.state = {jobs: [],pages:0};
         this.AuthService = new AuthService();
     }
-
-    componentWillMount(){
-        if(!this.AuthService.isLoggedIn()){
-            this.props.history.push("/login");
-        }
-    }
     componentDidMount(){
         this.search();
     }

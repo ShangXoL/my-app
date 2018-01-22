@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import signin from './signin.css';
 import AuthService from './component/AuthService';
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Redirect,
+    withRouter
+} from 'react-router-dom'
+import Dashboard from "./Dashboard";
 
 class Login extends Component {
     constructor(props){
@@ -11,7 +19,7 @@ class Login extends Component {
     }
     componentWillMount(){
         if(this.AuthService.isLoggedIn()){
-            this.props.history.replace('/');
+            this.props.history.push('/');
         }
     }
     handleFormSubmit(e){
@@ -19,7 +27,7 @@ class Login extends Component {
         this.AuthService.login(this.state.name,this.state.password)
             .then(res => {
                 alert('登录成功');
-                this.props.history.replace('/');
+                window.location.href='/';
             })
             .catch(err => {
                 alert(err.error);

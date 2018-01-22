@@ -9,6 +9,7 @@ import {
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import JobList from './job/JobList';
+import JobAdd from './job/JobAdd';
 import JobHistoryList from './job/JobHistoryList';
 import AuthService from './component/AuthService';
 
@@ -23,6 +24,7 @@ class App extends Component {
             <div>
                 <PrivateRoute exact path="/" component={Dashboard}></PrivateRoute>
                 <PrivateRoute path ="/job/list" component={JobList}></PrivateRoute>
+                <PrivateRoute path ="/job/add" component={JobAdd}></PrivateRoute>
                 <PrivateRoute path ="/job/history" component={JobHistoryList}></PrivateRoute>
                 <Route path="/login" component={Login}></Route>
                 <PrivateRoute path="/dashboard" component={Dashboard}/>
@@ -36,17 +38,7 @@ const auth = new AuthService();
 const fakeAuth = {
     isAuthenticated: auth.isLoggedIn(),
 }
-const AuthButton = withRouter(({ history }) => (
-    fakeAuth.isAuthenticated ? (
-        <p>
-            Welcome! <button onClick={() => {
-            fakeAuth.signout(() => history.push('/'))
-        }}>Sign out</button>
-        </p>
-    ) : (
-        <p>You are not logged in.</p>
-    )
-))
+
 const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={props => (
         fakeAuth.isAuthenticated ? (

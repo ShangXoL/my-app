@@ -5,6 +5,7 @@ import BreadCrumb from '../component/BreadCrumb';
 import PageNavigation from "../component/PageNavigation";
 import Config from '../utils/Config';
 import AuthService from '../component/AuthService';
+var moment = require('moment');
 
 class JobHistoryList extends Component {
     constructor(props){
@@ -16,10 +17,13 @@ class JobHistoryList extends Component {
     componentDidMount(){
         this.search();
     }
-    search(){
-        const query = '';
-        const page = 0;
-        const url = `${Config.domain}/job/history/?page=${page}`;
+    search(page=1){
+        const queryString = require('query-string');
+        const parsed = queryString.parse(this.props.location.search);
+        console.log(parsed);
+        const jobId = parsed.jobId;
+        //const page = 0;
+        const url = `${Config.domain}/job/history/?jobId=${jobId}&page=${page-1}`;
         this.AuthService.fetch(url,{method: 'GET'}).then(rsp => {
             console.table(rsp);
             const results = rsp.result;
@@ -33,13 +37,13 @@ class JobHistoryList extends Component {
     render() {
         var jobs = this.state.histories.map(history=>
             <tr>
-                <td>{history.id}</td>
                 <td>{history.jobId}</td>
                 <td>{history.jobName}</td>
                 <td>{history.cron}</td>
                 <td>{history.status}</td>
-                <td>{history.startedAt}</td>
-                <td>{history.endedAt}</td>
+                <td>{history.instance}</td>
+                <td>{moment(new Date(history.startedAt)).format('YYYY-MM-DD HH:mm:ss')}</td>
+                <td>{moment(new Date(history.endedAt)).format('YYYY-MM-DD HH:mm:ss')}</td>
                 <td>{history.message}</td>
             </tr>
         );
@@ -55,11 +59,11 @@ class JobHistoryList extends Component {
                                 <table class="table table-striped">
                                     <thead>
                                     <tr>
-                                        <th>id</th>
                                         <th>任务ID</th>
                                         <th>名称</th>
                                         <th>CRON</th>
                                         <th>状态</th>
+                                        <th>运行节点</th>
                                         <th>开始时间</th>
                                         <th>结束时间</th>
                                         <th>错误消息</th>
@@ -72,7 +76,7 @@ class JobHistoryList extends Component {
                             </div>
                         </div>
                     </div>
-                    <PageNavigation pages='1'/>
+                    <PageNavigation pages={this.state.pages} doSearch={this.search}/>
                 </div>
             </div>
         );
